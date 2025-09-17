@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h2>Leads</h2>
+        <a href="{% url 'lead_create' %}" class="btn btn-success">Add Lead</a>
+    </div>
+    <div class="card-body">
+        {% if leads %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Contact</th>
+                        <th>Status</th>
+                        <th>Value</th>
+                        <th>Updated</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for lead in leads %}
+                    <tr>
+                        <td>{{ lead.title }}</td>
+                        <td>{{ lead.contact.name }}</td>
+                        <td>
+                            <span class="status-badge status-{{ lead.status }}">
+                                {{ lead.get_status_display }}
+                            </span>
+                        </td>
+                        <td>
+                            {% if lead.value %}
+                                ${{ lead.value|floatformat:2 }}
+                            {% else %}
+                                —
+                            {% endif %}
+                        </td>
+                        <td>{{ lead.updated_at|date:"M d, Y" }}</td>
+                        <td>
+                            <a href="{% url 'lead_edit' lead.pk %}" class="btn btn-primary">Edit</a>
+                            <a href="{% url 'lead_delete' lead.pk %}" 
+                               class="btn btn-danger" 
+                               onclick="return confirm('Are you sure?')">Delete</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No leads yet. <a href="{% url 'lead_create' %}">Add your first lead</a></p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

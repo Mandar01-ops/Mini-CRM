@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h2>Dashboard</h2>
+        <div>
+            <a href="{% url 'contact_create' %}" class="btn btn-success">Add Contact</a>
+            <a href="{% url 'lead_create' %}" class="btn btn-primary">Add Lead</a>
+        </div>
+    </div>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-number">{{ contacts_count }}</div>
+        <div class="stat-label">Total Contacts</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number">{{ leads_count }}</div>
+        <div class="stat-label">Total Leads</div>
+    </div>
+    {% for stat in lead_stats %}
+    <div class="stat-card">
+        <div class="stat-number">{{ stat.count }}</div>
+        <div class="stat-label">{{ stat.status|title }} Leads</div>
+    </div>
+    {% endfor %}
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+    <div class="card">
+        <div class="card-header">
+            <h3>Recent Contacts</h3>
+            <a href="{% url 'contacts_list' %}">View All</a>
+        </div>
+        <div class="card-body">
+            {% if recent_contacts %}
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Company</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for contact in recent_contacts %}
+                        <tr>
+                            <td>{{ contact.name }}</td>
+                            <td>{{ contact.email }}</td>
+                            <td>{{ contact.company|default:"—" }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>No contacts yet. <a href="{% url 'contact_create' %}">Add your first contact</a></p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h3>Recent Leads</h3>
+            <a href="{% url 'leads_list' %}">View All</a>
+        </div>
+        <div class="card-body">
+            {% if recent_leads %}
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Contact</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for lead in recent_leads %}
+                        <tr>
+                            <td>{{ lead.title }}</td>
+                            <td>{{ lead.contact.name }}</td>
+                            <td>
+                                <span class="status-badge status-{{ lead.status }}">
+                                    {{ lead.get_status_display }}
+                                </span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>No leads yet. <a href="{% url 'lead_create' %}">Add your first lead</a></p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

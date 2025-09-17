@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h2>{{ title }}</h2>
+    </div>
+    <div class="card-body">
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label>{{ form.name.label_tag }}</label>
+                {{ form.name }}
+            </div>
+            <div class="form-group">
+                <label>{{ form.email.label_tag }}</label>
+                {{ form.email }}
+            </div>
+            <div class="form-group">
+                <label>{{ form.phone.label_tag }}</label>
+                {{ form.phone }}
+            </div>
+            <div class="form-group">
+                <label>{{ form.company.label_tag }}</label>
+                {{ form.company }}
+            </div>
+            <button type="submit" class="btn btn-success">Save Contact</button>
+            <a href="{% url 'contacts_list' %}" class="btn btn-primary">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

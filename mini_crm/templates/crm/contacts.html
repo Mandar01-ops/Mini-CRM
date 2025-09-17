@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h2>Contacts</h2>
+        <a href="{% url 'contact_create' %}" class="btn btn-success">Add Contact</a>
+    </div>
+    <div class="card-body">
+        {% if contacts %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Company</th>
+                        <th>Created</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for contact in contacts %}
+                    <tr>
+                        <td>{{ contact.name }}</td>
+                        <td>{{ contact.email }}</td>
+                        <td>{{ contact.phone|default:"—" }}</td>
+                        <td>{{ contact.company|default:"—" }}</td>
+                        <td>{{ contact.created_at|date:"M d, Y" }}</td>
+                        <td>
+                            <a href="{% url 'contact_delete' contact.pk %}" 
+                               class="btn btn-danger" 
+                               onclick="return confirm('Are you sure?')">Delete</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No contacts yet. <a href="{% url 'contact_create' %}">Add your first contact</a></p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
