@@ -14,7 +14,7 @@ def dashboard(request):
     recent_contacts = Contact.objects.filter(created_by=request.user)[:5]
     recent_leads = Lead.objects.filter(created_by=request.user)[:5]
     
-    # Lead status breakdown
+    
     lead_stats = Lead.objects.filter(created_by=request.user).values('status').annotate(count=Count('status'))
     
     context = {
